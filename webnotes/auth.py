@@ -39,9 +39,9 @@ class HTTPRequest:
 
 		# language
 		self.set_lang(webnotes.get_env_vars('HTTP_ACCEPT_LANGUAGE'))
-		
-		webnotes.remote_ip = webnotes.get_env_vars('REMOTE_ADDR')
 
+		webnotes.remote_ip = webnotes.get_env_vars('HTTP_X_FORWARDED_FOR') or webnotes.get_env_vars('REMOTE_ADDR')
+		
 		# load cookies
 		webnotes.cookie_manager = CookieManager()
 
@@ -134,7 +134,7 @@ class LoginManager:
 				webnotes.add_cookies["full_name"] = full_name
 			else:
 				webnotes.response['message'] = 'Logged In'
-	
+
 	def post_login(self):
 		self.run_trigger()
 		self.validate_ip_address()
@@ -284,4 +284,3 @@ def update_password(user, password):
 		values (%s, password(%s)) 
 		on duplicate key update `password`=password(%s)""", (user, 
 		password, password))
-	

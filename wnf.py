@@ -587,6 +587,18 @@ def python(site=None):
 	webnotes.destroy()
 
 @cmd
+def python(site=None):
+	import webnotes 
+	import commands, os
+	python = commands.getoutput('which python')
+	webnotes.init(site=site)
+	if site:
+		os.environ["site"] = site
+	os.environ["PYTHONSTARTUP"] = os.path.join(os.path.dirname(__file__), "pythonrc.py")
+	os.execv(python, [python])
+	webnotes.destroy()
+
+@cmd
 def smtp_debug_server():
 	import commands, os
 	python = commands.getoutput('which python')
